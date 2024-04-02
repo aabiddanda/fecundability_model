@@ -2,7 +2,7 @@ import numpy as np
 
 
 class FecundabilityEstimator:
-
+    """"""
 
     def __init__(self):
         pass
