@@ -7,6 +7,7 @@ We are specifically interested in the factors that may impact the probability of
 1. `src`: directory for main source code for modeling
 2. `notebooks`: directory for plotting via Jupyter notebooks
 3. `data`: directory for intermediate data tables from papers used to set expected behavior.
+4. `doc`: directory with method documentation in LaTeX
 
 ### Data
 
