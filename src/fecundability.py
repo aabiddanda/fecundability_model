@@ -2,13 +2,21 @@ import numpy as np
 
 
 class FecundabilityEstimator:
-    """"""
+    """Create an estimator of """
 
     def __init__(self):
         pass
 
     def p_aneuploid(self):
-        """Return the probability of a specific aneuploidy type."""
+        """Return the probability of a specific aneuploidy type.
+
+        Entries correspond to baseline probability of: 
+        * meiotic origin
+        * tripolar-mitotic
+        * low mosaic
+        * high mosaic
+        * euploid
+        """
         return np.array([0.4, 0.05, 0.1, 0.05, 0.4])
 
     def p_failed_implantation(self):
