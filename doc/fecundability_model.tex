@@ -17,6 +17,7 @@
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{natbib}
 \usepackage{indentfirst}
+\usepackage{amsmath}
 % \usepackage{palatino}
 
 \title{A Mathematical model for Human Fecundability}
@@ -32,9 +33,59 @@
 
 \section*{Model Description}
 
+We briefly provide an introduction to the model below, with the initial summarized probabilities under consideration. The  probability we would like to model is the probability of a **live birth conditional on conception occurring**. We model this using a series of conditional probabilities: 
+
+\begin{equation}
+	P(\text{Live Birth}) =  (1 - P(\text{EPL} | \text{implantation})) \cdot (1 - P(\text{failed implantation}))
+\end{equation}
+This model posits that a health live birth (conditional on conception occurring) is conditional on both no implantation failure **and** no early pregnancy loss. While there may be a number of potential factors influencing both of these negative events during pregnancy, we primarily rely on the assumption that aneuploidy is a primary driver of these effects. We first posit that the distribution of aneuploidy outcomes come from the following distribution: 
+
+\begin{equation}
+\begin{aligned}
+P(\text{Aneuploidy} = a) &= \begin{cases}
+0.4 &, a = \text{meiotic}\\
+0.05 &, a = \text{tripolar mitotic}\\
+0.1 &, a = \text{mosaic}_{low}\\
+0.05 &, a = \text{mosaic}_{high}\\
+0.4 &, a = \text{euploid}\\
+\end{cases}
+\end{aligned}
+\end{equation}
+
+
+
+These are approximate figures but as long as the proportions sum to 1 here all of the following aspects of the model will follow as needed.  We can then model the implantation failure rate directly: 
+
+$$
+P(\text{failed implantation}) = P(\text{failed implantation} | \text{Aneuploidy}) = \begin{cases}
+0.8 &, a = \text{meiotic}\\
+1.0 &, a = \text{tripolar mitotic}\\
+0.4 &, a = \text{mosaic}_{low}\\
+0.5 &, a = \text{mosaic}_{high}\\
+0.05 &, a = \text{euploid}\\
+\end{cases}
+$$
+
+This conditional probability suggests that different forms of aneuploidy have different impacts on implantation - roughly corresponding to when they may arise during development (e.g. meiotic-origin being the earliest). We can then compute the final relevant probability distribution as the following: 
+
+$$
+P(EPL | \text{implantation}, \text{Aneuploidy}=a) = \begin{cases}
+1 - \eta &, a = \text{meiotic}\\
+1 - \eta &, a = \text{tripolar mitotic}\\
+0.2 &, a = \text{mosaic}_{low}\\
+0.5 &, a = \text{mosaic}_{high}\\
+\epsilon &, a = \text{euploid}\\
+\end{cases}
+$$
+
+where $\eta$ is a kind of "escape" probability that is very small where a meiotic or tripolar aneuploidy could not lead to an early-pregnancy loss and $\epsilon$ is the probability of other lethal genetic mutations that may lead to aberrant pregnancy outcomes. 
+
+In particular,  $\epsilon$ is the key parameter of the number of lethal mutations that occur in a euploid embryo and can still lead to pregnancy loss. 
+
 
 
 \section*{Results}
+
 
 
 
