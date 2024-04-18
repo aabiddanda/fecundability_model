@@ -55,15 +55,18 @@ While there may be a number of potential factors influencing both of these negat
 
 \begin{equation}
 \begin{aligned}
-P(\text{Aneuploidy} = a) &= \begin{cases}
-0.5 &, a = \text{Euploid}\\
-0.25 &, a = \text{Meiotic}\\
-0.25 &, a = \text{Mitotic}\\
+P(\text{A}_{Meiotic} = a, \text{A}_{Mitotic} = m) &= \begin{cases}
+206 / 909 = 0.226 &, a = \text{Euploid}, m = \text{None}\\
+(88 + 61)/ 909 \times 3/4 = 0.123 &, a = \text{Euploid}, m = \text{Early-Mitotic}\\
+(88 + 61)/ 909 \times 1/4 = 0.041 &, a = \text{Euploid}, m = \text{Late-Mitotic}\\
+294 / 909 = 0.32 &, a = \text{Meiotic}, m = \text{None}\\
+260 / 909 \times 3/4 = 0.215 &, a = \text{Meiotic}, m = \text{Early-Mitotic}\\
+260 / 909 \times 1/4 = 0.072 &, a = \text{Meiotic}, m = \text{Late-Mitotic}
 \end{cases}
 \end{aligned}
 \end{equation}
 
-These are approximate, but as long as $1 = \sum_{a \in \mathcal{A}} P(\text{Aneuploidy} = a)$, all of the following aspects of the model follow. 
+These are approximate and are derived \citep{McCoy2023-dg}. We have chosen specifically to model the joint distribution of both mitotic and meiotic aneuploidies since they are both through to contribute to early pregnancy loss (particular meiotic aneuploidies and early-mitotic aneuploidies). As long as all elements of the joint probability distribution satisfy being a full probability distribution, then this can be pre-supposed. 
 
 \subsubsection*{Implantation Failure}
 
