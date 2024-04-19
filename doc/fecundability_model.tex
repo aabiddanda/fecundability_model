@@ -122,7 +122,7 @@ We now turn to the second conditional probability for early pregnancy loss (EPL)
 	\end{cases},
 \end{equation}
 
-where $\eta$ is an "escape" probability where a meiotic or mitotic aneuploidy does not lead to early-pregnancy loss and $\epsilon$ is the probability of lethal mutations that may lead to early pregnancy loss outcomes even within a euploid embryo (or euploid + late mitotic embryo). The probability of 0.57 comes from \citep{Gu2021-tk}. \footnote{The parameter $\epsilon$ represents the probability of smaller scale, but still lethal, structural variants so can be thought of as a larger catch-all for lethal mutations that survive implantation but still lead to inviability}. 
+where $\eta$ is an "escape" probability where a meiotic or mitotic aneuploidy does not lead to early-pregnancy loss and $\epsilon$ is the probability of lethal mutations that may lead to early pregnancy loss outcomes even within a euploid embryo (or euploid + late mitotic embryo). The probability of 0.57 comes from \citep{Gu2021-tk}\footnote{The parameter $\epsilon$ represents the probability of smaller scale, but still lethal, structural variants so can be thought of as a larger catch-all for lethal mutations that survive implantation but still lead to inviability}. 
 
 The corresponding absolute probability for this section of the ``iceberg'' is: 
 
@@ -154,14 +154,10 @@ In most cases however, we do not have strong estimates for whether the miscarria
 
 \subsubsection*{Accounting for Maternal Age} 
 
-Since maternal age has a well-documented effect on the abundance of \textit{meiotic} aneuploidies, here we focus on how to scale the original $P(A,M)$ distribution such that the distribution of $P(A = \text{Meiotic})$ can scale as a function of maternal age - whereas the rate of mitotic errors will remain unchanged by age. 
-
-% NOTE: this just amounts to 
+Since maternal age has a well-documented effect on the abundance of \textit{meiotic} aneuploidies, here we focus on how to scale the original $P(A,M)$ distribution such that the distribution of $P(A = \text{Meiotic})$ can scale as a function of maternal age - whereas the rate of mitotic errors will remain unchanged by age. Under the assumption that the mean maternal age of the patients in \citep{McCoy2023-dg} is $\sim 38.9$ years of age, we scale the marginal probability of a meiotic error $P(A) = \sum_M P(A,M)$ by $\alpha_{age} = \frac{P(M | age)}{P(M | age = 38.9)}$ using the fitted model from \citep{Gruhn2019-al}.
 
 
 \section*{Results}
-
-% NOTE: small figure on extending this to different ages?
 
 
 

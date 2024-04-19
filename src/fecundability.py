@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import warnings
 
 
 class FecundabilityEstimator:
@@ -8,67 +9,139 @@ class FecundabilityEstimator:
     def __init__(self):
         pass
 
-    def p_aneuploid(self, xs=None):
+    def p_aneuploid(self, X=None):
         """Return the probability of a specific aneuploidy type.
 
         Entries correspond to baseline probability of:
-        * euploid
-        * meiotic
-        * mitotic
+        ```
+             | Meiotic | Euploid
+        None | X1      |  X2
+        Early| X3      |  X4
+        Late | X5      |  X6
+        ```
         """
-        if xs is None:
-            return np.array([0.5, 0.25, 0.25])
+        if X is None:
+            return np.array(
+                [
+                    [294 / 909, 206 / 909],
+                    [260 / 909 * 3 / 4, (88 + 61) / 909 * 3 / 4],
+                    [260 / 909 * 1 / 4, (88 + 61) / 909 * 1 / 4],
+                ]
+            )
         else:
-            assert np.all((xs > 0.0) & (xs < 1.0))
-            assert np.isclose(xs.sum(), 1.0)
-            return xs
-    
-    def p_failed_implantation(self, xs=None):
+            assert np.all((X > 0.0) & (X < 1.0))
+            assert np.isclose(X.sum(), 1.0)
+            return X
+
+    def scale_meiotic_prob(self, A, p=0.2):
+        """Scale the probability of meiotic aneuploidy."""
+        assert (p > 0) & (p < 1.0)
+        assert A.shape[0] == 3
+        assert A.shape[1] == 2
+        X = A.copy()
+        # We have to scale everything to the original margianl expected probability of aneuploidy ...
+        p_m = X[:, 0].sum()
+        X[:, 0] = X[:, 0] * (p / p_m)
+        X[:, 1] = X[:, 1] * ((1 - p) / (1 - p_m))
+        assert np.isclose(X.sum(), 1.0)
+        return X
+
+    def p_failed_implantation(self, X=None):
         """The probability of failed implantation conditional on aneuploidy type.
 
         Entries correspond to the probability of a failed implantation conditional on:
-        * euploid
-        * meiotic
-        * mitotic
+        ```
+             | Meiotic | Euploid
+        None | X1      |  X2
+        Early| X3      |  X4
+        Late | X5      |  X6
+        ```
         """
-        if xs is None:
-            return np.array([0.16, 0.36, 0.57])
+        if X is None:
+            return np.array([[0.36, 0.16], [0.55, 0.57], [0.36, 0.16]])
         else:
-            assert np.all((xs > 0.0) & (xs < 1.0))
-            return xs
-    
+            assert np.all((X > 0.0) & (X < 1.0))
+            return X
+
     def p_epl_implantation(self, eta=1e-2, eps=1e-1):
         """Probability of early pregnancy loss conditional on implantation occurring.
 
         The  probability of an early-pregnancy loss conditional on implantation succeeding
 
-        The output vector corresponds to the probability:
-        * euploid
-        * meiotic
-        * mitotic
-        
+        Entries correspond to the probability of EPL conditional on:
+        ```
+             | Meiotic | Euploid
+        None | X1      |  X2
+        Early| X3      |  X4
+        Late | X5      |  X6
+        ```
         Params:
             * eta (`float`): This is the "escape probability" of a meiotic or tripolar mitotic aneuploidy.
             * eps (`float`): This is the probability of euploid embryo EPL
         """
         assert eta < 1.0
         assert eps < 1.0
-        return np.array([eps, 1.0 - eta, 1.0 - eta])
+        return np.array([[0.57, eps], [1.0 - eta, 1.0 - eta], [0.57, eps]])
 
-    def p_miscarriage(self, xs=None):
-        """Probability of miscarriage conditional on not EPL & implantation worked
+    def p_miscarriage(self, X=None):
+        """Probability of miscarriage conditional on not EPL & implantation not failing
 
         The output vector corresponds to the probability:
         * euploid
         * meiotic
         * mitotic
-        
+
         """
-        if xs is None:
-            return np.array([0.3, 0.3, 0.3])
+        if X is None:
+            return np.array([[0.3, 0.3], [0.3, 0.3], [0.3, 0.3]])
         else:
-            assert np.all((xs > 0) & (xs < 1.0))
-            return xs 
+            assert np.all((X > 0) & (X < 1.0))
+            return X
+
+    def p_implant_marginal(self, A=None, gamma_implant=5e-2):
+        """Marginal probability of an implantation error."""
+        assert A.shape == (3, 2)
+        p_implant = gamma_implant + np.sum(
+            self.p_failed_implantation() * self.p_aneuploid(X=A)
+        )
+        if p_implant > 1.0:
+            warnings.warn("Marginal probability of implantation error is > 1!")
+        return p_implant
+
+    def p_epl_marginal(self, A=None, gamma_epl=5e-2, gamma_implant=5e-2):
+        """Marginal probability of an early pregnancy loss."""
+        assert A.shape == (3, 2)
+        assert (gamma_epl > 0) and (gamma_epl < 1.0)
+        p_epl = gamma_epl + np.sum(
+            self.p_epl_implantation()
+            * (1.0 - self.p_failed_implantation())
+            * (1 - gamma_implant)
+            * self.p_aneuploid(X=A)
+        )
+        if p_epl > 1.0:
+            warnings.warn("Marginal probability of EPL is > 1!")
+        return p_epl
+
+    def p_miscarriage_marginal(
+        self, A=None, gamma_mis=5e-2, gamma_epl=5e-2, gamma_implant=5e-2
+    ):
+        """Marginal probability of miscarriage."""
+        assert A.shape == (3, 2)
+        assert (gamma_mis > 0) and (gamma_mis < 1.0)
+        assert (gamma_epl > 0) and (gamma_epl < 1.0)
+        assert (gamma_implant > 0) and (gamma_implant < 1.0)
+        p_mis = gamma_mis + np.sum(
+            self.p_miscarriage()
+            * (1.0 - self.p_epl_implantation())
+            * (1.0 - gamma_epl)
+            * (1.0 - self.p_failed_implantation())
+            * (1 - gamma_implant)
+            * self.p_aneuploid(X=A)
+        )
+        if p_mis > 1.0:
+            warnings.warn("Marginal probability of miscarriage is > 1!")
+        return p_mis
+
 
 class FecundabilityPlotting:
     def __init__():
