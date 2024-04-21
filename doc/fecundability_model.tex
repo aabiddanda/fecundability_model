@@ -168,35 +168,22 @@ P(\text{Miscarriage}) &=  \gamma_{Miscarriage} + \sum_{A}\sum_{M} P(Miscarriage 
 
 \subsubsection*{Accounting for Maternal Age} 
 
-Since maternal age has a well-documented effect on the abundance of \textit{meiotic} aneuploidies, here we focus on how to scale the original $P(A,M)$ distribution such that the distribution of $P(A = \text{Meiotic})$ can scale as a function of maternal age - whereas the rate of mitotic errors will remain constant as a function of age. Corroborating the total proportion of meiotic aneuploid embryos with the fitted probability of meiotic trisomy in \citep{Gruhn2019-al}, we get approximate maternal age of 46.20 - 47.75 years - which is significantly higher than the realized 38.9 year average maternal age. 
-
+Since maternal age has a well-documented effect on the abundance of \textit{meiotic} aneuploidies, here we focus on how to scale the original $P(A,M)$ distribution such that the distribution of $P(A = \text{Meiotic})$ can scale as a function of maternal age - whereas the rate of mitotic errors will remain constant as a function of age. Corroborating the total proportion of meiotic aneuploid embryos with the fitted probability of meiotic trisomy in \citep{Gruhn2019-al}, we get approximate maternal age of 46.20 to 47.75 years - significantly higher than the realized 38.9 year average maternal age. 
 
 Under the assumption that the mean maternal age of the patients in \citep{McCoy2023-dg} is $\sim 38.9$ years of age, we scale the marginal probability of a meiotic error $P(A) = \sum_M P(A,M)$ by $\alpha_{age} = \frac{P(M | age)}{P(M | age = 38.9)}$ using the fitted model from \citep{Gruhn2019-al}.
 
 \section*{Results}
 
-Under our model we can first approximate the joint distribution of each of the six aneuploidy categories as a function of maternal age (Figure X).
+Following these model approximations - we can estimate how aneuploidy occurrence shapes the distribution of pregnancy losses at various stages in development. The resulting output of this model is a way to generate maternal age specific ``icebergs'' for pregnancy loss risk and fecundability, or the tip of the iceberg (\ref{fig:2}). 
 
 \begin{figure}[H]
 \begin{center}
-    \includegraphics[width=0.75\textwidth]{figures/joint_prob_aneuploidy.042024.pdf}
+    \includegraphics[width=0.75\textwidth]{figures/model_figure.042024.pdf}
 \end{center}
 \vspace{-1.5em}
-\caption{The joint distribution of all aneuploidy probabilities from \ref{table:1}.}
-\label{fig:1}
+\caption{Display of how the rates of aneuploidy are shaped by maternal age and correspondingly shape pregnancy losses.}
+\label{fig:2}
 \end{figure}
-
-We have also 
-
-\begin{figure}[H]
-\begin{center}
-    \includegraphics[width=0.75\textwidth]{figures/joint_prob_loss_category.042024.pdf}
-\end{center}
-\vspace{-1.5em}
-\caption{The collective probabilities of pregnancy loss at different stages being driven by aneuploidy status.}
-\label{fig:1}
-\end{figure}
-
 
 \bibliographystyle{plainnat}
 \bibliography{refs}

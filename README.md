@@ -23,5 +23,14 @@ Maria C Magnus, Allen J Wilcox, Nils-Halvdan Morken, Clarice R Weinberg,  Siri E
 BMJ 2019
 ```
 
+We used aneuploidy occurrence in surviving and arrested embryos from the following paper to establish the model: 
+
+```
+“Meiotic and Mitotic Aneuploidies Drive Arrest of in Vitro Fertilized Human Preimplantation Embryos.” 
+McCoy, Rajiv C., Michael C. Summers, Abeo McCollin, Christian S. Ottolini, Kamal Ahuja, and Alan H. Handyside. 2023.
+Genome Medicine 15 (1): 77.
+```
+
 ## Contact 
+
 * Arjun Biddanda (@aabiddanda)

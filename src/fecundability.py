@@ -141,10 +141,10 @@ class FecundabilityEstimator:
 
 
 class FecundabilityPlotting:
-    def __init__():
+    def __init__(self):
         pass
 
-    def plot_macklon_pyramid(ax, xs=np.array([0.3, 0.3, 0.1, 0.3]), **kwargs):
+    def plot_macklon_pyramid(self, ax, xs=np.array([0.3, 0.3, 0.1, 0.3]), **kwargs):
         """Plot a version of the Macklon et al pyramid."""
         assert xs.size == 4
         assert np.isclose(xs.sum(), 1.0)
@@ -158,5 +158,5 @@ class FecundabilityPlotting:
         ax.axhline(0.5, lw=0.5, linestyle="--", color="black")
         pos = [0.25 / 2, (0.25 + 0.5) / 2, (0.5 + 0.75) / 2, (0.75 + 0.9) / 2]
         for i, x in enumerate(xs):
-            ax.text(0.5, pos[i], f"{x*100}%", **kwargs)
+            ax.text(0.5, pos[i], f"{x*100:0.1f}%", **kwargs)
         return ax
