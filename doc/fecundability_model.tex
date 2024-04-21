@@ -51,7 +51,7 @@ We provide an introduction to the model below, with the conditional probabilitie
 
 This model posits that a health live birth (conditional on conception occurring) is conditional on no implantation failure, no early pregnancy loss, \textit{and} no miscarriages.
 
-While there may be a number of potential factors influencing both of these negative events during pregnancy, we primarily focus on the assumption that aneuploidy drives a large fraction of these effects. We first posit that the distribution of aneuploidy outcomes come from the following distribution ($P(A,M)$: 
+While there may be a number of potential factors influencing both of these negative events during pregnancy, we primarily focus on the assumption that aneuploidy drives a large fraction of these effects. We first posit that the distribution of aneuploidy outcomes come from the following distribution $P(A,M)$: 
 
 % \begin{equation}
 % \begin{aligned}
@@ -66,21 +66,25 @@ While there may be a number of potential factors influencing both of these negat
 % \end{aligned}
 % \end{equation}
 
+\begin{table}[H]
 \begin{center}
-\begin{tabular}{ |c|c|c| } 
- \hline
-  & Meiotic & Euploid  \\ 
- \hline
- None & $\frac{294}{909}$ & $\frac{206}{909}$ \\ 
- \hline
- Early-Mitotic & $\frac{260}{909}\times \frac{3}{4}$ & $\frac{(88 + 61)}{909}\times \frac{3}{4}$ \\
- \hline
- Late-Mitotic & $\frac{260}{909}\times \frac{1}{4}$ & $\frac{(88 + 61)}{909}\times \frac{1}{4}$\\
- \hline
-\end{tabular}
-\end{center}
+	\begin{tabular}{ |c|c|c| } 
+	 \hline
+	  & Meiotic & Euploid  \\ 
+	 \hline
+	 None & $\frac{294}{909}$ & $\frac{206}{909}$ \\ 
+	 \hline
+	 Early-Mitotic & $\frac{260}{909}\times \frac{3}{4}$ & $\frac{(88 + 61)}{909}\times \frac{3}{4}$ \\
+	 \hline
+	 Late-Mitotic & $\frac{260}{909}\times \frac{1}{4}$ & $\frac{(88 + 61)}{909}\times \frac{1}{4}$\\
+	 \hline
+	\end{tabular}
+	\caption{Joint probability distribution of meiotic (columns) and mitotic (rows) aneuploidy based on outcome data from \citep{McCoy2023-dg}.}
+	\label{table:1}
+	\end{center}
+\end{table}
 
-These are approximate and are derived from \citep{McCoy2023-dg}. We have chosen specifically to model the joint distribution of \textit{both} mitotic and meiotic aneuploidies since they both contribute to early pregnancy loss (particular meiotic aneuploidies and early-mitotic aneuploidies). As long as all elements of the joint probability distribution satisfy being a full probability distribution, then this can be pre-supposed (see later section on scaling for maternal age). 
+We have chosen specifically to model the joint distribution of \textit{both} mitotic and meiotic aneuploidies since they both contribute to early pregnancy loss (particular meiotic aneuploidies and early-mitotic aneuploidies). We note that we have also roughly approximated a ratio of 3:1 of early to late-mitotic errors as the first cell divisions post-fertilization are those that are most prone to errors. As long as all elements of the joint probability distribution satisfy being a full probability distribution, then this can be pre-supposed (see later section on scaling for maternal age). 
 
 \subsubsection*{Implantation Failure}
 
@@ -150,15 +154,48 @@ The final consideration is the conditional probability of a miscarriage, conditi
 
 In most cases however, we do not have strong estimates for whether the miscarriage was the result of an aneuploidy or not. However, in almost all birth cohort datasets the occurrence of miscarriages reflects a strong U-shaped trend  with maternal age \citep{Gruhn2019-al}. 
 
-% NOTE: look at BGI datasets
+We then perform a similar marginalization as before - to get the full probability of miscarriage: 
+
+\begin{equation}
+\begin{aligned}
+P(\text{Miscarriage}) &=  \gamma_{Miscarriage} + \sum_{A}\sum_{M} P(Miscarriage | A,M)\\
+&\cdot (1. - P(EPL | \text{implantation}, A, M) - \gamma_{EPL})\\
+&\cdot (1 - P(\text{failed implantation} | A, M) - \gamma_{implant})\\ 
+&\cdot P(A, M),
+\end{aligned}
+\end{equation}
+
 
 \subsubsection*{Accounting for Maternal Age} 
 
-Since maternal age has a well-documented effect on the abundance of \textit{meiotic} aneuploidies, here we focus on how to scale the original $P(A,M)$ distribution such that the distribution of $P(A = \text{Meiotic})$ can scale as a function of maternal age - whereas the rate of mitotic errors will remain unchanged by age. Under the assumption that the mean maternal age of the patients in \citep{McCoy2023-dg} is $\sim 38.9$ years of age, we scale the marginal probability of a meiotic error $P(A) = \sum_M P(A,M)$ by $\alpha_{age} = \frac{P(M | age)}{P(M | age = 38.9)}$ using the fitted model from \citep{Gruhn2019-al}.
+Since maternal age has a well-documented effect on the abundance of \textit{meiotic} aneuploidies, here we focus on how to scale the original $P(A,M)$ distribution such that the distribution of $P(A = \text{Meiotic})$ can scale as a function of maternal age - whereas the rate of mitotic errors will remain constant as a function of age. Corroborating the total proportion of meiotic aneuploid embryos with the fitted probability of meiotic trisomy in \citep{Gruhn2019-al}, we get approximate maternal age of 46.20 - 47.75 years - which is significantly higher than the realized 38.9 year average maternal age. 
 
+
+Under the assumption that the mean maternal age of the patients in \citep{McCoy2023-dg} is $\sim 38.9$ years of age, we scale the marginal probability of a meiotic error $P(A) = \sum_M P(A,M)$ by $\alpha_{age} = \frac{P(M | age)}{P(M | age = 38.9)}$ using the fitted model from \citep{Gruhn2019-al}.
 
 \section*{Results}
 
+Under our model we can first approximate the joint distribution of each of the six aneuploidy categories as a function of maternal age (Figure X).
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=0.75\textwidth]{figures/joint_prob_aneuploidy.042024.pdf}
+\end{center}
+\vspace{-1.5em}
+\caption{The joint distribution of all aneuploidy probabilities from \ref{table:1}.}
+\label{fig:1}
+\end{figure}
+
+We have also 
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=0.5\textwidth]{figures/joint_prob_loss_category.042024.pdf}
+\end{center}
+\vspace{-1.5em}
+\caption{The collective probabilities of pregnancy loss at different stages being driven by aneuploidy status.}
+\label{fig:1}
+\end{figure}
 
 
 \bibliographystyle{plainnat}

@@ -114,8 +114,7 @@ class FecundabilityEstimator:
         assert (gamma_epl > 0) and (gamma_epl < 1.0)
         p_epl = gamma_epl + np.sum(
             self.p_epl_implantation()
-            * (1.0 - self.p_failed_implantation())
-            * (1 - gamma_implant)
+            * (1.0 - self.p_failed_implantation() - gamma_implant)
             * self.p_aneuploid(X=A)
         )
         if p_epl > 1.0:
@@ -132,10 +131,8 @@ class FecundabilityEstimator:
         assert (gamma_implant > 0) and (gamma_implant < 1.0)
         p_mis = gamma_mis + np.sum(
             self.p_miscarriage()
-            * (1.0 - self.p_epl_implantation())
-            * (1.0 - gamma_epl)
-            * (1.0 - self.p_failed_implantation())
-            * (1 - gamma_implant)
+            * (1.0 - self.p_epl_implantation() - gamma_epl)
+            * (1.0 - self.p_failed_implantation() - gamma_implant)
             * self.p_aneuploid(X=A)
         )
         if p_mis > 1.0:
