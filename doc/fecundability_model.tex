@@ -53,19 +53,6 @@ This model posits that a health live birth (conditional on conception occurring)
 
 While there may be a number of potential factors influencing both of these negative events during pregnancy, we primarily focus on the assumption that aneuploidy drives a large fraction of these effects. We first posit that the distribution of aneuploidy outcomes come from the following distribution $P(A,M)$: 
 
-% \begin{equation}
-% \begin{aligned}
-% P(\text{A}_{Meiotic} = a, \text{A}_{Mitotic} = m) &= \begin{cases}
-% 206 / 909 = 0.226 &, a = \text{Euploid}, m = \text{None}\\
-% (88 + 61)/ 909 \times 3/4 = 0.123 &, a = \text{Euploid}, m = \text{Early-Mitotic}\\
-% (88 + 61)/ 909 \times 1/4 = 0.041 &, a = \text{Euploid}, m = \text{Late-Mitotic}\\
-% 294 / 909 = 0.32 &, a = \text{Meiotic}, m = \text{None}\\
-% 260 / 909 \times 3/4 = 0.215 &, a = \text{Meiotic}, m = \text{Early-Mitotic}\\
-% 260 / 909 \times 1/4 = 0.072 &, a = \text{Meiotic}, m = \text{Late-Mitotic}
-% \end{cases}
-% \end{aligned}
-% \end{equation}
-
 \begin{table}[H]
 \begin{center}
 	\begin{tabular}{ |c|c|c| } 
@@ -118,11 +105,11 @@ We now turn to the second conditional probability for early pregnancy loss (EPL)
 \begin{equation}
 	P(EPL | \text{implantation}, A=a, M=m) = \begin{cases}
 	\epsilon &, a= \text{Euploid}, m=\text{None}\\
-	0.57 &, a = \text{Meiotic}, m=\text{None}\\
+	1 - \eta &, a = \text{Meiotic}, m=\text{None}\\
 	1 - \eta &, a = \text{Euploid}, m=\text{Early-Mitotic}\\
 	1 - \eta &, a = \text{Meiotic}, m=\text{Early-Mitotic}\\
 	\epsilon &, a = \text{Euploid}, m=\text{Late-Mitotic}\\
-	0.57 &, a = \text{Meiotic}, m=\text{Late-Mitotic}\\
+	1 - \eta &, a = \text{Meiotic}, m=\text{Late-Mitotic}\\
 	\end{cases},
 \end{equation}
 
@@ -145,12 +132,17 @@ where we have again added in a baseline level of non-aneuploidy driven EPL ($\ga
 The final consideration is the conditional probability of a miscarriage, conditional on surviving beyond EPL and implantation. 
 
 \begin{equation}
-	P(Miscarriage | \text{Aneuploidy}=a) = \begin{cases}
-	0.3 &, a= \text{Euploid}\\
-	0.3 &, a = \text{Meiotic}\\
-	0.3 &, a = \text{Mitotic}\\
+	P(Miscarriage | A=a, M=m) = \begin{cases}
+	\epsilon_m &, a= \text{Euploid}, m=\text{None}\\
+	1 - \eta_m &, a = \text{Meiotic}, m=\text{None}\\
+	1 - \eta_m &, a = \text{Euploid}, m=\text{Early-Mitotic}\\
+	1 - \eta_m &, a = \text{Meiotic}, m=\text{Early-Mitotic}\\
+	\epsilon_m &, a = \text{Euploid}, m=\text{Late-Mitotic}\\
+	1 - \eta_m &, a = \text{Meiotic}, m=\text{Late-Mitotic}\\
 	\end{cases},
 \end{equation}
+
+We have revised this here to approximately include
 
 In most cases however, we do not have strong estimates for whether the miscarriage was the result of an aneuploidy or not. However, in almost all birth cohort datasets the occurrence of miscarriages reflects a strong U-shaped trend  with maternal age \citep{Gruhn2019-al}. 
 
