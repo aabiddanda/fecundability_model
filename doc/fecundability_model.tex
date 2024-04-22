@@ -84,11 +84,11 @@ While there may be a number of potential factors influencing both of these negat
 	\end{center}
 \end{table}
 
-We have chosen specifically to model the joint distribution of \textit{both} mitotic and meiotic aneuploidies since they both contribute to early pregnancy loss (particular meiotic aneuploidies and early-mitotic aneuploidies). We note that we have also roughly approximated a ratio of 3:1 of early to late-mitotic errors as the first cell divisions post-fertilization are those that are most prone to errors. As long as all elements of the joint probability distribution satisfy being a full probability distribution, then this can be pre-supposed (see later section on scaling for maternal age). 
+We have chosen specifically to model the joint distribution of \textit{both} mitotic and meiotic aneuploidies since they both contribute to early pregnancy loss (particular meiotic aneuploidies and early-mitotic aneuploidies). We note that we have also roughly approximated a ratio of 3:1 of early to late-mitotic errors as the first cell divisions post-fertilization are those that are most prone to errors \citep{Currie2022-wp}. As long as the joint probability distribution $P(A,M)$ satisfies being a full probability distribution, then all of the subsequent modeling can be worked through(see later section on scaling for maternal age). 
 
 \subsubsection*{Implantation Failure}
 
-The second conditional model is the implantation failure rate: 
+The second conditional model is the implantation failure rate conditioned on aneuploidy type: 
 
 \begin{equation}
 P(\text{failed implantation} | A=a, M=m) = \begin{cases}
@@ -109,11 +109,11 @@ We can then calculate the following absolute probability:
 P(\text{failed implantation}) = \gamma_{implant} + \sum_{A}\sum_{M} P(\text{failed implantation} | A, M) P(A, M) ,
 \end{equation}
 
-which directly corresponds to the bottom section of the iceberg in \citep{Macklon2002-zn}, but importantly now incorporates different types of aneuploidy. We have also added an intercept term ($\gamma_{implant}$) that acts as a kind of catch-all term for the pregnancy loss that can occur at this stage.   
+which directly corresponds to the bottom section of the iceberg in \citep{Macklon2002-zn}, but importantly now incorporates different types of aneuploidy. We have also added an intercept term ($\gamma_{implant}$) that captures non-aneuploidy driven pregnancy losses that can occur at this stage.   
 
 \subsubsection*{Early Pregnancy Loss}
 
-We now turn to the second conditional probability for early pregnancy loss (EPL) which is when there is pregnancy loss following a successful implantation but prior to being a clinically-defined miscarriage.
+We now turn to the second conditional probability for early pregnancy loss (EPL) which is when there is pregnancy loss following a successful implantation but prior to being a clinically-defined miscarriage:
 
 \begin{equation}
 	P(EPL | \text{implantation}, A=a, M=m) = \begin{cases}
@@ -126,7 +126,7 @@ We now turn to the second conditional probability for early pregnancy loss (EPL)
 	\end{cases},
 \end{equation}
 
-where $\eta$ is an "escape" probability where a meiotic or mitotic aneuploidy does not lead to early-pregnancy loss and $\epsilon$ is the probability of lethal mutations that may lead to early pregnancy loss outcomes even within a euploid embryo (or euploid + late mitotic embryo). The probability of 0.57 comes from \citep{Gu2021-tk}\footnote{The parameter $\epsilon$ represents the probability of smaller scale, but still lethal, structural variants so can be thought of as a larger catch-all for lethal mutations that survive implantation but still lead to inviability}. 
+where $\eta$ is an "escape" probability where a meiotic or mitotic aneuploidy does not lead to early-pregnancy loss and $\epsilon$ is the probability of lethal mutations that may lead to early pregnancy loss outcomes even within a euploid embryo (or euploid + late mitotic embryo). The probability of 0.57 comes from \citep{Gu2021-tk} which investigated the aneuploidy status of products of conception \footnote{The parameter $\epsilon$ represents the probability of smaller scale, but still lethal, structural variants so can be thought of as a larger catch-all for lethal mutations that survive implantation but still lead to inviability}. 
 
 The corresponding absolute probability for this section of the ``iceberg'' is: 
 
@@ -138,7 +138,7 @@ P(EPL) &=  \gamma_{EPL} + \sum_{A}\sum_{M} P(EPL | \text{implantation}, A, M) \\
 \end{aligned}
 \end{equation}
 
-where we have again added in a baseline level of early pregnancy loss that is not conditional on aneuploidy ($\gamma_{EPL}$). 
+where we have again added in a baseline level of non-aneuploidy driven EPL ($\gamma_{EPL}$). 
 
 \subsubsection*{Miscarriage}
 
@@ -165,7 +165,6 @@ P(\text{Miscarriage}) &=  \gamma_{Miscarriage} + \sum_{A}\sum_{M} P(Miscarriage 
 \end{aligned}
 \end{equation}
 
-
 \subsubsection*{Accounting for Maternal Age} 
 
 Since maternal age has a well-documented effect on the abundance of \textit{meiotic} aneuploidies, here we focus on how to scale the original $P(A,M)$ distribution such that the distribution of $P(A = \text{Meiotic})$ can scale as a function of maternal age - whereas the rate of mitotic errors will remain constant as a function of age. Corroborating the total proportion of meiotic aneuploid embryos with the fitted probability of meiotic trisomy in \citep{Gruhn2019-al}, we get approximate maternal age of 46.20 to 47.75 years - significantly higher than the realized 38.9 year average maternal age. 
@@ -174,6 +173,8 @@ Under the assumption that the mean maternal age of the patients in \citep{McCoy2
 
 \section*{Results}
 
+\subsection*{Modeling Aneuploidy-driven pregnancy loss across maternal age.}
+
 Following these model approximations - we can estimate how aneuploidy occurrence shapes the distribution of pregnancy losses at various stages in development. The resulting output of this model is a way to generate maternal age specific ``icebergs'' for pregnancy loss risk and fecundability, or the tip of the iceberg (\ref{fig:2}). 
 
 \begin{figure}[H]
@@ -181,9 +182,35 @@ Following these model approximations - we can estimate how aneuploidy occurrence
     \includegraphics[width=0.75\textwidth]{figures/model_figure.042024.pdf}
 \end{center}
 \vspace{-1.5em}
-\caption{Display of how the rates of aneuploidy are shaped by maternal age and correspondingly shape pregnancy losses.}
+\caption{Display of how the rates of aneuploidy are shaped by maternal age (bottom row) and correspondingly shape pregnancy losses at different stages (middle + top row).}
 \label{fig:2}
 \end{figure}
+
+Importantly, we note that mitotic-origin categories occur at a constant rate as a function of maternal age. 
+
+\subsection*{Relationship to Fecundity and Fecundability}
+
+It is important to note that our model is more closely related to \textit{fecundity} - the probability of a live birth in a given menstrual cycle - than to \textit{fecundability} - the probability of becoming \textit{pregnant} in a given menstrual cycle. We have assumed that the model is conditional on a conception occurring. However, we can also approximate these two quantities using a similar interpretation: 
+
+\begin{equation}
+\begin{aligned}
+Fecundability &= P(conception)\times (1 - P(\text{Failed implantation}))\\
+Fecundity &= P(conception)\times P(\text{Live Birth})
+\end{aligned},
+\end{equation}
+
+where we have defined here the probability of becoming pregnant as a successful conception \textit{and} implantation occurring. While these two quantities are certainly related - and mediated by aneuploidy of different forms - they also make a clear assumption of what $P(conception)$ is. If we use the approximate estimate of $P(conception) \approx 0.1 - 0.33$ from \citep{Wilcox1995-hs} then we can arrive at  0.13 (0.064, 0.212) for \textit{Fecundability} and 0.048 (0.022, 0.073) for \textit{Fecundity} for a maternal age of 30 years old.
+
+\section*{Discussion + Interpretations}
+
+There are a number of limitations to our modeling here that may warrant further attention. We detail some of these below: 
+
+\begin{enumerate}
+\item \textbf{Age-related variation in non-aneuploidy factors}. Currently, we have not modeled an age-dependence on the non-aneuploidy driven factors (e.g. $\gamma_{implant}$) when it is likely that these factors may also have a strong relationship with age. However, in the absence of well-curated epidemiological data to directly model environmental variables and its affect on specific categories of loss, we leave this as an area for future exploration.  
+\item \textbf{Relationship between PGT-A and Natural Conceptions}. Most of the basis for understanding embryonic aneuploidy in recent years has been driven by genetic observations from in-vitro fertilization (IVF), which may be potentially a biased representation of what occurs in natural conceptions. For example, due to monetary cost, it is fiscally more reasonable to only assay embryos with a visually better embryo grade - leading to higher-quality embryos being assessed for aneuploidies. For instance, this would make the estimate from \ref{table:1} a potential under estimate of the underlying probability of aneuploidy. If we take this to mean that estimates from PGT-A \textit{underestimate} the probability of aneuploidies in natural conceptions, then implicitly our estimate of fecundability and fecundity are an \textit{upper-bound}. However, it is also possible that estimates of the probability of aneuploidy are upwardly biased in PGT-A due to aspects of IVF being fundamentally different than natural conception, in which case our estimates would be \textit{lower-bounds}. It is worth considering with future data how these experimental biases may be better investigated to improve our broader understanding of fecundability.
+\end{enumerate}
+
+
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
