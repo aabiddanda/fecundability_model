@@ -1,3 +1,5 @@
+import numpy as np 
+
 class FecundabilityEstimator:
     """Estimators for the conditional probabilities involved in pregnancy losses."""
 
