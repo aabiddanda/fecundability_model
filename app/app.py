@@ -55,5 +55,41 @@ def aneuploid_prob(maternal_age=np.arange(20, 52), day3=True):
     return data_df
 
 
-chart_data = aneuploid_prob()
-st.bar_chart(chart_data, x="Maternal Age", y_label="Probability")
+def pregnancy_outcome(maternal_age=np.arange(20, 52), day3=True):
+    if day3:
+        ps = pmeiotic_age_day3(maternal_age)
+    else:
+        ps = pmeiotic_age_day5(maternal_age)
+    A = f_est.p_aneuploid()
+    As = [f_est.scale_meiotic_prob(A, p=a) for a in ps]
+    outcome_probs = []
+    for A in As:
+        p_mis, p_epl, p_implant = (
+            f_est.p_miscarriage_marginal(A=A),
+            f_est.p_epl_marginal(A=A),
+            f_est.p_implant_marginal(A=A),
+        )
+        # Should we have a re-scaling here to ensure sum to 1?
+        outcome_probs.append(
+            [1.0 - (p_mis + p_epl + p_implant), p_mis, p_epl, p_implant]
+        )
+
+    outcome_probs = np.vstack(outcome_probs)
+    data_df = pd.DataFrame(
+        {
+            "Maternal Age": maternal_age,
+            "Implantation Error": outcome_probs[:, 3],
+            "Early-Pregnancy Loss": outcome_probs[:, 2],
+            "Miscarriage": outcome_probs[:, 1],
+            "Live Birth": outcome_probs[:, 0],
+        }
+    )
+    return data_df
+
+
+aneuploidy_data = aneuploid_prob()
+st.bar_chart(aneuploidy_data, x="Maternal Age", y_label="Probability")
+
+
+outcome_data = pregnancy_outcome()
+st.bar_chart(outcome_data, x="Maternal Age", y_label="Probability")
