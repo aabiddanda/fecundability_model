@@ -70,9 +70,12 @@ def pregnancy_outcome(maternal_age=np.arange(20, 52), day3=True):
             f_est.p_implant_marginal(A=A),
         )
         # Should we have a re-scaling here to ensure sum to 1?
-        outcome_probs.append(
-            [1.0 - (p_mis + p_epl + p_implant), p_mis, p_epl, p_implant]
-        )
+        if (p_mis + p_epl + p_implant) > 1.0:
+            x = np.array([0, p_mis, p_epl, p_implant])
+        else:
+            x = np.array([1.0 - (p_mis + p_epl + p_implant), p_mis, p_epl, p_implant])
+        x /= np.sum(x)
+        outcome_probs.append(x)
 
     outcome_probs = np.vstack(outcome_probs)
     data_df = pd.DataFrame(
@@ -87,9 +90,12 @@ def pregnancy_outcome(maternal_age=np.arange(20, 52), day3=True):
     return data_df
 
 
-aneuploidy_data = aneuploid_prob()
-st.bar_chart(aneuploidy_data, x="Maternal Age", y_label="Probability")
+min_age = st.slider("Minimum Maternal Age", 15, 55, 18)
+max_age = st.slider("Maximum Maternal Age", 15, 55, 52)
+st.subheader("Aneuploidy Occurrence")
+aneuploidy_data = aneuploid_prob(maternal_age=np.linspace(min_age, max_age, 100))
+st.area_chart(aneuploidy_data, x="Maternal Age", y_label="Probability", stack=True)
 
-
-outcome_data = pregnancy_outcome()
-st.bar_chart(outcome_data, x="Maternal Age", y_label="Probability")
+st.subheader("Pregnancy Losses")
+outcome_data = pregnancy_outcome(maternal_age=np.linspace(min_age, max_age, 100))
+st.area_chart(outcome_data, x="Maternal Age", y_label="Probability", stack=True)
