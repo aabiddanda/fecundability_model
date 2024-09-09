@@ -7,7 +7,7 @@ from libfecund import FecundabilityEstimator
 
 st.title("Fecundability Predictions")
 
-gruhn2019_df = pd.read_csv("data/gruhn_etal2019.fig1E.csv")
+gruhn2019_df = pd.read_csv("./data/gruhn_etal2019.fig1E.csv")
 
 pmeiotic_age_day3 = interp1d(
     gruhn2019_df[gruhn2019_df.sample_type_indicator == 0].maternal_age.values,
